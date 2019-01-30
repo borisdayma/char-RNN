@@ -14,7 +14,7 @@ Dependencies can be installed through `requirements.txt`.
 
 The following files are present:
 
-- `notebook - char-RNNN.ipynb` is a Jupyter Notebook use to prototype our solution ;
+- `notebook.ipynb` is a Jupyter Notebook use to prototype our solution ;
 - `train.py` is a script to run several experiments and log them on W&B.
 
 The runs and reports can be found on W&B project page (FUTURE LINK TO INSERT).
