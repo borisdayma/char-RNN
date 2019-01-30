@@ -17,10 +17,10 @@ config.rnn_module = "GRU"       # "RNN", "LSTM" or "GRU"
 config.hidden_size = 128        # hidden size of RNN module
 config.num_layers = 3           # number of layers of RNN module
 config.dropout = 0.1            # dropout between RNN layers (0 means no dropout)
-config.epochs = 100             # number of epochs for training
+config.epochs = 50              # number of epochs for training
 config.batches_per_epoch = 300  # number of batches of data processed per epoch
 config.sequence_per_batch = 8   # number of sequence of characters per batch
-config.char_per_sequence = 150         # number of characters per sequence
+config.char_per_sequence = 150  # number of characters per sequence
 
 # Download dataset
 PATH_DATA = Path("data")
@@ -69,7 +69,8 @@ input_data = torch.zeros(len(tensor_data), n_elements).scatter_(1, tensor_data.u
 label_data = tensor_data  # we don't need labels in one-hot format
 
 # Split the data between test and validation sets
-split = round(0.95 * len(tensor_data))
+# We actually don't go through the entire test set at each epoch while we do for validation set
+split = round(0.98 * len(tensor_data))      # to be adjusted based on file size (2% validation of 2.6MB is enough)
 train_data, train_label = input_data[:split], label_data[1:split+1]
 valid_data, valid_label = input_data[split:-2], label_data[split+1:]
 
@@ -211,3 +212,6 @@ for epoch in trange(config.epochs):
                "Validation loss": valid_loss})
         
     print("Epoch {} - Training loss {} - Validation loss {}".format(epoch+1, train_loss, valid_loss))
+    
+# Save model to W&B
+torch.save(model, wandb.run.dir)
