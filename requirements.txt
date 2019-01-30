@@ -2,3 +2,4 @@ numpy
 torch
 requests
 tqdm
+jupyter
