@@ -223,4 +223,4 @@ for epoch in trange(config.epochs):
     print("Epoch {} - Training loss {} - Validation loss {}".format(epoch+1, train_loss, valid_loss))
     
 # Save model to W&B
-torch.save(model, wandb.run.dir)
+torch.save(model, Path(wandb.run.dir) / 'model.pt')
