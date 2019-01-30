@@ -1,7 +1,7 @@
 from pathlib import Path
 import requests
 import zipfile
-from tqdm import trange
+from tqdm import trange, tqdm
 from numpy import random
 import torch
 import torch.nn as nn
@@ -220,7 +220,7 @@ for epoch in trange(config.epochs):
     wandb.log({"Training loss": train_loss,
                "Validation loss": valid_loss})
         
-    print("Epoch {} - Training loss {} - Validation loss {}".format(epoch+1, train_loss, valid_loss))
+    tqdm.write("Epoch {} - Training loss {} - Validation loss {}".format(epoch+1, train_loss, valid_loss))
     
 # Save model to W&B
 torch.save(model, Path(wandb.run.dir) / 'model.pt')
