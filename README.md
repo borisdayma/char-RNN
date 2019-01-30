@@ -17,4 +17,7 @@ The following files are present:
 - `notebook.ipynb` is a Jupyter Notebook use to prototype our solution ;
 - `train.py` is a script to run several experiments and log them on W&B.
 
-The runs and reports can be found on W&B project page (FUTURE LINK TO INSERT).
+See my results:
+
+- [W&B report](https://beta.wandb.ai/borisd13/char-RNN/reports?view=borisd13%2FReport)
+- [W&B runs](https://beta.wandb.ai/borisd13/char-RNN?workspace=user-borisd13and)
