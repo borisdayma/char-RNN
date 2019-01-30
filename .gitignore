@@ -1,0 +1,13 @@
+# Project data files
+model.pt
+data/
+
+# Wandb files
+wandb/
+wandb-debug.log
+
+# IDE
+.vscode/
+
+# Jupyter notebook
+.ipynb_checkpoints/
