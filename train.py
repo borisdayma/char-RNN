@@ -152,7 +152,11 @@ train_label = train_label.to(device)
 valid_data = valid_data.to(device)
 valid_label = valid_label.to(device)
 model.to(device)
-hidden = hidden.to(device)
+if config.rnn_module == "LSTM":
+    for h in hidden:
+        h = h.to(device)
+else:
+    hidden = hidden.to(device)
 
 # Magic (TODO comment to improve)
 wandb.watch(model)
@@ -199,7 +203,12 @@ for epoch in trange(config.epochs):
     # Calculate validation loss
     with torch.no_grad():
         model.eval()
-        hidden_valid = model.initHidden(1).to(device)
+        hidden_valid = model.initHidden(1)
+        if config.rnn_module == "LSTM":
+            for h in hidden_valid:
+                h = h.to(device)
+        else:
+            hidden_valid = hidden_valid.to(device)
         for i in range(valid_length-1):
             input_val = valid_data[i]
             label_val = valid_label[i].view(1)
