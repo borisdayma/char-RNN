@@ -11,6 +11,7 @@ torch = "*"
 requests = "*"
 tqdm = "*"
 jupyter = "*"
+wandb = "*"
 
 [requires]
 python_version = "3.7"

@@ -3,3 +3,4 @@ torch
 requests
 tqdm
 jupyter
+wandb
