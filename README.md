@@ -1,12 +1,12 @@
 # Char-RNN
 
-*This repository is used to predict next characters from sample text, similar to [char-rnn](https://github.com/karpathy/char-rnn) and serves as a demo to show how to take advantage of [Weights & Biases](https://www.wandb.com/) to monitor training and optimize neural networks.*
+*This repository revisits text generation as detailed in [The Unreasonable Effectiveness of Recurrent Neural Networks](http://karpathy.github.io/2015/05/21/rnn-effectiveness/) and tries to bring more understanding about RNN's and how to optimize them.*
 
 ## Introduction
 
-A workflow from prototyping to fine-tuning neural networks has been detailed in this post (FUTURE LINK TO INSERT).
+This repository contains support material to solve the text generation problem as detailed in [The Unreasonable Effectiveness of Recurrent Neural Networks](http://karpathy.github.io/2015/05/21/rnn-effectiveness/). The objective is to read a large text file, one character at a time, and then be able to generate text (one character at a time) with the same style.
 
-This repository contains support material by solving the Char-RNN problem, for which we want to predict next characters from previously read text.
+Every single experiment is automatically logged onto [Weighs & Biases](https://www.wandb.com/) for easier analysis/interpretation of results. We also want to bring more understanding about RNN's and how to optimize them.
 
 ## Usage
 
@@ -14,10 +14,12 @@ Dependencies can be installed through `requirements.txt`.
 
 The following files are present:
 
-- `notebook.ipynb` is a Jupyter Notebook use to prototype our solution ;
-- `train.py` is a script to run several experiments and log them on W&B.
+- `notebook.ipynb` is a Jupyter Notebook used to prototype our solution ;
+- `train.py` is a script to run several experiments and log them on [Weighs & Biases](https://www.wandb.com/).
 
-See my results:
+## Results
+
+See my results and conclusions:
 
 - [W&B report](https://beta.wandb.ai/borisd13/char-RNN/reports?view=borisd13%2FReport)
 - [W&B runs](https://beta.wandb.ai/borisd13/char-RNN?workspace=user-borisd13and)
