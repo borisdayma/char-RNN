@@ -14,10 +14,10 @@ wandb.init(project="char-RNN")
 # Define hyper-parameters
 config = wandb.config           # for shortening
 config.rnn_module = "GRU"       # "RNN", "LSTM" or "GRU"
-config.hidden_size = 128        # hidden size of RNN module
-config.num_layers = 3           # number of layers of RNN module
-config.dropout = 0.1            # dropout between RNN layers (0 means no dropout)
-config.epochs = 50              # number of epochs for training
+config.hidden_size = 256        # hidden size of RNN module
+config.num_layers = 2           # number of layers of RNN module
+config.dropout = 0.             # dropout between RNN layers (0 means no dropout)
+config.epochs = 100             # number of epochs for training
 config.batches_per_epoch = 300  # number of batches of data processed per epoch
 config.sequence_per_batch = 8   # number of sequence of characters per batch
 config.char_per_sequence = 150  # number of characters per sequence
@@ -158,7 +158,7 @@ if config.rnn_module == "LSTM":
 else:
     hidden = hidden.to(device)
 
-# Magic (TODO comment to improve)
+# Store network topology
 wandb.watch(model)
 
 # Define optimizer
