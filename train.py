@@ -209,10 +209,14 @@ for epoch in trange(config.epochs):
         else:
             hidden_valid = hidden_valid.to(device)
         for i in range(valid_length-1):
-            input_val = valid_data[i]
-            label_val = valid_label[i].view(1)
+            input_val = valid_data[i].view(1)
+            label_val = valid_label[i]
+
+            # One-hot input
+            input_val = torch.zeros(len(input_val), n_elements, device = device).scatter_(1, input_val.unsqueeze(-1), 1)
+
             output, hidden_valid = model(input_val, hidden_valid)
-            loss = loss_function(output, label_val)
+            loss = loss_function(output, label_val.view(-1))
             valid_loss += loss.item() / (valid_length - 1)
 
     # Log results
