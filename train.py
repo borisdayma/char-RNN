@@ -64,15 +64,11 @@ for i, c in enumerate(chars):
     
 n_elements = len(data_dictionary)
     
-# Transform into one-hot (source: https://discuss.pytorch.org/t/convert-int-into-one-hot-format/507/29)
-input_data = torch.zeros(len(tensor_data), n_elements).scatter_(1, tensor_data.unsqueeze(-1), 1)
-label_data = tensor_data  # we don't need labels in one-hot format
-
 # Split the data between test and validation sets
 # We actually don't go through the entire test set at each epoch while we do for validation set
 split = round(0.98 * len(tensor_data))      # to be adjusted based on file size (2% validation of 2.6MB is enough)
-train_data, train_label = input_data[:split], label_data[1:split+1]
-valid_data, valid_label = input_data[split:-2], label_data[split+1:]
+train_data, train_label = tensor_data[:split], tensor_data[1:split+1]
+valid_data, valid_label = tensor_data[split:-2], tensor_data[split+1:]
 
 # Create a class to handle data in batch
 class TrainingData():    
@@ -98,6 +94,9 @@ class TrainingData():
         # Extract sequences
         sequences_input = tuple(self.train_data[idx:idx+self.char_per_sequence] for idx in self.batch_idx)
         sequences_label = tuple(self.train_label[idx:idx+self.char_per_sequence] for idx in self.batch_idx)
+
+        # Transform input into one-hot (source: https://discuss.pytorch.org/t/convert-int-into-one-hot-format/507/29)
+        sequences_input = tuple(torch.zeros(len(data), n_elements).scatter_(1, data.unsqueeze(-1), 1) for data in sequences_input)
         
         # Move next idx
         self.batch_idx = (idx + self.char_per_sequence for idx in self.batch_idx)
