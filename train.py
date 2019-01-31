@@ -72,12 +72,13 @@ valid_data, valid_label = tensor_data[split:-2], tensor_data[split+1:]
 
 # Create a class to handle data in batch
 class TrainingData():    
-    def __init__(self, train_data, train_label, sequence_per_batch = 64, char_per_sequence = 128):
+    def __init__(self, train_data, train_label, device, sequence_per_batch = 64, char_per_sequence = 128):
         
         self.train_data = train_data
         self.train_label = train_label
         self.sequence_per_batch = sequence_per_batch
         self.char_per_sequence = char_per_sequence
+        self.device = device
         self.length = len(train_data)
         
         # We start reading the text at even sections based on number of sequence per batch
@@ -96,7 +97,7 @@ class TrainingData():
         sequences_label = tuple(self.train_label[idx:idx+self.char_per_sequence] for idx in self.batch_idx)
 
         # Transform input into one-hot (source: https://discuss.pytorch.org/t/convert-int-into-one-hot-format/507/29)
-        sequences_input = tuple(torch.zeros(len(data), n_elements).scatter_(1, data.unsqueeze(-1), 1) for data in sequences_input)
+        sequences_input = tuple(torch.zeros(len(data), n_elements, device = self.device).scatter_(1, data.unsqueeze(-1), 1) for data in sequences_input)
         
         # Move next idx
         self.batch_idx = (idx + self.char_per_sequence for idx in self.batch_idx)
@@ -145,7 +146,6 @@ hidden = model.initHidden(config.sequence_per_batch)
 
 # Use GPU if available
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-device = torch.device("cpu")   # for some reason, it goes much faster in my experiments
 train_data = train_data.to(device)
 train_label = train_label.to(device)
 valid_data = valid_data.to(device)
@@ -164,7 +164,7 @@ wandb.watch(model)
 optimizer = optimizer_function(model.parameters())
 
 # Load data
-training_data = TrainingData(train_data, train_label, config.sequence_per_batch, config.char_per_sequence)
+training_data = TrainingData(train_data, train_label, device, config.sequence_per_batch, config.char_per_sequence)
 valid_length = len(valid_data)
 
 # Start training
