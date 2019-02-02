@@ -16,7 +16,7 @@ config = wandb.config           # for shortening
 config.rnn_module = "GRU"       # "RNN", "LSTM" or "GRU"
 config.hidden_size = 256        # hidden size of RNN module
 config.num_layers = 2           # number of layers of RNN module
-config.dropout = 0.             # dropout between RNN layers (0 means no dropout)
+config.dropout = 0.1            # dropout between RNN layers (0 means no dropout)
 config.epochs = 100             # number of epochs for training
 config.batches_per_epoch = 300  # number of batches of data processed per epoch
 config.sequence_per_batch = 8   # number of sequence of characters per batch
@@ -63,7 +63,7 @@ for i, c in enumerate(chars):
     tensor_data[i] = data_dictionary.add_char(c)
     
 n_elements = len(data_dictionary)
-    
+
 # Split the data between test and validation sets
 # We actually don't go through the entire test set at each epoch while we do for validation set
 split = round(0.98 * len(tensor_data))      # to be adjusted based on file size (2% validation of 2.6MB is enough)
@@ -129,7 +129,7 @@ class Model(nn.Module):
         return output, hidden
 
     def initHidden(self, batch_size):
-        # initialize hidden state with a sequence of word tokens
+        # initialize hidden state to zeros
         if self.rnn_module == "LSTM":
             return torch.zeros(self.num_layers, batch_size, self.hidden_size), torch.zeros(
                 self.num_layers, batch_size, self.hidden_size)
@@ -202,12 +202,16 @@ for epoch in trange(config.epochs):
     # Calculate validation loss
     with torch.no_grad():
         model.eval()
+
+        # Detach hidden layers
         hidden_valid = model.initHidden(1)
         if config.rnn_module == "LSTM":
             for h in hidden_valid:
                 h = h.to(device)
         else:
             hidden_valid = hidden_valid.to(device)
+            
+        # Process validation data one character at a time
         for i in range(valid_length-1):
             input_val = valid_data[i].view(1)
             label_val = valid_label[i]
@@ -215,6 +219,7 @@ for epoch in trange(config.epochs):
             # One-hot input
             input_val = torch.zeros(len(input_val), n_elements, device = device).scatter_(1, input_val.unsqueeze(-1), 1)
 
+            # Forward pass and calculate loss
             output, hidden_valid = model(input_val, hidden_valid)
             loss = loss_function(output, label_val.view(-1))
             valid_loss += loss.item() / (valid_length - 1)
@@ -223,7 +228,7 @@ for epoch in trange(config.epochs):
     wandb.log({"Training loss": train_loss,
                "Validation loss": valid_loss})
         
-    tqdm.write("Epoch {} - Training loss {} - Validation loss {}".format(epoch+1, train_loss, valid_loss))
+    tqdm.write("\nEpoch {} - Training loss {} - Validation loss {}\n".format(epoch+1, train_loss, valid_loss))
     
 # Save model to W&B
 torch.save(model, Path(wandb.run.dir) / 'model.pt')
