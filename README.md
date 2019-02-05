@@ -23,3 +23,7 @@ See my results and conclusions:
 
 - [W&B report](https://beta.wandb.ai/borisd13/char-RNN/reports?view=borisd13%2FReport)
 - [W&B runs](https://beta.wandb.ai/borisd13/char-RNN?workspace=user-borisd13and)
+
+And here is a little sample of what we can generate.
+
+![sample](img/sample.jpg)
