@@ -21,6 +21,7 @@ The following files are present:
 
 See my results and conclusions:
 
+- [Results & Conclusions](https://www.wandb.com/blog/recurrent-neural-networks-for-text-generation)
 - [W&B report](https://beta.wandb.ai/borisd13/char-RNN/reports?view=borisd13%2FReport)
 - [W&B runs](https://beta.wandb.ai/borisd13/char-RNN?workspace=user-borisd13and)
 
